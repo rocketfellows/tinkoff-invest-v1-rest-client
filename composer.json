@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "rocketfellows\\TinkoffInvestV1HttpCleint\\": "src/"
+            "rocketfellows\\TinkoffInvestV1HttpClient\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "rocketfellows\\TinkoffInvestV1HttpCleint\\tests\\": "tests/"
+            "rocketfellows\\TinkoffInvestV1HttpClient\\tests\\": "tests/"
         }
     }
 }
