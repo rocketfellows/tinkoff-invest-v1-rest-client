@@ -7,7 +7,7 @@ use GuzzleHttp\Client as HttpClient;
 class Client
 {
     private const HTTP_REQUEST_METHOD = 'POST';
-    private const MASK_FULL_SERVICE_PATH = '%s%s%s';
+    private const MASK_FULL_SERVICE_PATH = '%s/%s/%s';
     private const MASK_AUTHORIZATION_HEADER = 'Bearer %s';
 
     private $config;
