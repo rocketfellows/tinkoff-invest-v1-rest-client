@@ -8,6 +8,7 @@ class Client
 {
     private const HTTP_REQUEST_METHOD = 'POST';
     private const MASK_FULL_SERVICE_PATH = '%s/%s/%s';
+    private const MASK_SERVICE_PATH = 'tinkoff.public.invest.api.contract.v1.%s';
     private const MASK_AUTHORIZATION_HEADER = 'Bearer %s';
 
     private $config;
@@ -27,11 +28,11 @@ class Client
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function request(string $serviceUrl, string $serviceMethod, array $data): array
+    public function request(string $serviceName, string $serviceMethod, array $data): array
     {
         $response = $this->httpClient->request(
             self::HTTP_REQUEST_METHOD,
-            $this->getFullServicePath($this->config->getServerUrl(), $serviceUrl, $serviceMethod),
+            $this->getFullServicePath($this->config->getServerUrl(), $serviceName, $serviceMethod),
             $this->getRequestOptions($this->config->getAccessToken(), $data)
         );
 
@@ -40,15 +41,20 @@ class Client
 
     private function getFullServicePath(
         string $serverUrl,
-        string $serviceUrl,
+        string $serviceName,
         string $serviceMethod
     ): string {
         return sprintf(
             self::MASK_FULL_SERVICE_PATH,
             $serverUrl,
-            $serviceUrl,
+            $this->getServicePath($serviceName),
             $serviceMethod
         );
+    }
+
+    private function getServicePath(string $serviceName): string
+    {
+        return sprintf(self::MASK_SERVICE_PATH, $serviceName);
     }
 
     private function getRequestOptions(string $accessToken, array $data): array
