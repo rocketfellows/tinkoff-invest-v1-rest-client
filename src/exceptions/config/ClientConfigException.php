@@ -2,8 +2,8 @@
 
 namespace rocketfellows\TinkoffInvestV1HttpClient\exceptions\config;
 
-use rocketfellows\TinkoffInvestV1HttpClient\ClientConfig;
+use rocketfellows\TinkoffInvestV1HttpClient\exceptions\ClientException;
 
-abstract class ClientConfigException extends ClientConfig
+abstract class ClientConfigException extends ClientException
 {
 }
