@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1648587867">
-  <project timestamp="1648587867">
-    <metrics files="0" loc="0" ncloc="0" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+<coverage generated="1654118524">
+  <project timestamp="1654118524">
+    <file name="/app/src/Client.php">
+      <class name="rocketfellows\TinkoffInvestV1HttpClient\Client" namespace="global">
+        <metrics complexity="6" methods="6" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="16" coveredelements="0"/>
+      </class>
+      <line num="16" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="30" type="method" name="request" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="41" type="method" name="getFullServicePath" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="54" type="method" name="getRequestOptions" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="62" type="method" name="getRequestHeader" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="70" type="method" name="getAuthorizationHeader" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <metrics loc="75" ncloc="67" classes="1" methods="6" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="16" coveredelements="0"/>
+    </file>
+    <file name="/app/src/ClientConfig.php">
+      <class name="rocketfellows\TinkoffInvestV1HttpClient\ClientConfig" namespace="global">
+        <metrics complexity="6" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="0" elements="13" coveredelements="0"/>
+      </class>
+      <line num="17" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="25" type="method" name="getServerUrl" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="30" type="method" name="getAccessToken" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="39" type="method" name="validateConfig" visibility="private" complexity="3" crap="12" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <metrics loc="50" ncloc="42" classes="1" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="0" elements="13" coveredelements="0"/>
+    </file>
+    <file name="/app/src/exceptions/ClientException.php">
+      <class name="rocketfellows\TinkoffInvestV1HttpClient\exceptions\ClientException" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="10" ncloc="10" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/app/src/exceptions/config/AccessTokenEmptyException.php">
+      <class name="rocketfellows\TinkoffInvestV1HttpClient\exceptions\config\AccessTokenEmptyException" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="8" ncloc="8" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/app/src/exceptions/config/ClientConfigException.php">
+      <class name="rocketfellows\TinkoffInvestV1HttpClient\exceptions\config\ClientConfigException" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="10" ncloc="10" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/app/src/exceptions/config/ServerUrlEmptyException.php">
+      <class name="rocketfellows\TinkoffInvestV1HttpClient\exceptions\config\ServerUrlEmptyException" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="8" ncloc="8" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <metrics files="6" loc="161" ncloc="145" classes="2" methods="10" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="19" coveredstatements="0" elements="29" coveredelements="0"/>
   </project>
 </coverage>
