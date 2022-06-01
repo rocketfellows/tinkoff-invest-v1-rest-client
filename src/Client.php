@@ -1,6 +1,6 @@
 <?php
 
-namespace rocketfellows\TinkoffInvestV1HttpClient;
+namespace rocketfellows\TinkoffInvestV1RestClient;
 
 use GuzzleHttp\Client as HttpClient;
 

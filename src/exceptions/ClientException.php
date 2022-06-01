@@ -1,6 +1,6 @@
 <?php
 
-namespace rocketfellows\TinkoffInvestV1HttpClient\exceptions;
+namespace rocketfellows\TinkoffInvestV1RestClient\exceptions;
 
 use Exception;
 

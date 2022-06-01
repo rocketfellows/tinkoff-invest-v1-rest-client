@@ -1,5 +1,5 @@
 {
-    "name": "rocketfellows/tinkoff-invest-v1-http-client",
+    "name": "rocketfellows/tinkoff-invest-v1-rest-client",
     "authors": [
         {
             "name": "Arslan Imamutdinov",
@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "rocketfellows\\TinkoffInvestV1HttpClient\\": "src/"
+            "rocketfellows\\TinkoffInvestV1RestClient\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "rocketfellows\\TinkoffInvestV1HttpClient\\tests\\": "tests/"
+            "rocketfellows\\TinkoffInvestV1RestClient\\tests\\": "tests/"
         }
     }
 }

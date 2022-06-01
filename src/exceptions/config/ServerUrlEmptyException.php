@@ -1,6 +1,6 @@
 <?php
 
-namespace rocketfellows\TinkoffInvestV1HttpClient\exceptions\config;
+namespace rocketfellows\TinkoffInvestV1RestClient\exceptions\config;
 
 class ServerUrlEmptyException extends ClientConfigException
 {

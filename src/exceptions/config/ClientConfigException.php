@@ -1,8 +1,8 @@
 <?php
 
-namespace rocketfellows\TinkoffInvestV1HttpClient\exceptions\config;
+namespace rocketfellows\TinkoffInvestV1RestClient\exceptions\config;
 
-use rocketfellows\TinkoffInvestV1HttpClient\exceptions\ClientException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\ClientException;
 
 abstract class ClientConfigException extends ClientException
 {

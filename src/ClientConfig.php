@@ -1,9 +1,9 @@
 <?php
 
-namespace rocketfellows\TinkoffInvestV1HttpClient;
+namespace rocketfellows\TinkoffInvestV1RestClient;
 
-use rocketfellows\TinkoffInvestV1HttpClient\exceptions\config\AccessTokenEmptyException;
-use rocketfellows\TinkoffInvestV1HttpClient\exceptions\config\ServerUrlEmptyException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\config\AccessTokenEmptyException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\config\ServerUrlEmptyException;
 
 class ClientConfig
 {
