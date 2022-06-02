@@ -3,6 +3,14 @@
 namespace rocketfellows\TinkoffInvestV1RestClient;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\BadResponseException as GuzzleBadResponseException;
+use GuzzleHttp\Exception\ClientException as GuzzleClientException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException as GuzzleServerException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseData;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ClientException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\HttpClientException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ServerException;
 
 class Client
 {
@@ -21,22 +29,39 @@ class Client
     }
 
     /**
-     * TODO: handle exceptions
-     * @param string $serviceUrl
-     * @param string $serviceMethod
-     * @param array $data
-     * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws ServerException
+     * @throws ClientException
+     * @throws HttpClientException
      */
     public function request(string $serviceName, string $serviceMethod, array $data): array
     {
-        $response = $this->httpClient->request(
-            self::HTTP_REQUEST_METHOD,
-            $this->getFullServicePath($this->config->getServerUrl(), $serviceName, $serviceMethod),
-            $this->getRequestOptions($this->config->getAccessToken(), $data)
-        );
+        try {
+            $response = $this->httpClient->request(
+                self::HTTP_REQUEST_METHOD,
+                $this->getFullServicePath($this->config->getServerUrl(), $serviceName, $serviceMethod),
+                $this->getRequestOptions($this->config->getAccessToken(), $data)
+            );
 
-        return json_decode($response->getBody()->getContents(), true);
+            $responseData = json_decode($response->getBody()->getContents(), true);
+
+            return ($responseData !== false && !is_null($responseData)) ? $responseData : [];
+        } catch (GuzzleException $exception) {
+            if (!$exception instanceof GuzzleBadResponseException) {
+                throw new HttpClientException($exception->getMessage(), $exception->getCode(), $exception);
+            }
+
+            $badResponseData = $this->getBadResponseData($exception);
+
+            if ($exception instanceof GuzzleClientException) {
+                throw new ClientException($badResponseData, $exception->getMessage(), $exception->getCode(), $exception);
+            }
+
+            if ($exception instanceof GuzzleServerException) {
+                throw new ServerException($badResponseData, $exception->getMessage(), $exception->getCode(), $exception);
+            }
+
+            throw new HttpClientException($exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 
     private function getFullServicePath(
@@ -76,5 +101,16 @@ class Client
     private function getAuthorizationHeader(string $accessToken): string
     {
         return sprintf(self::MASK_AUTHORIZATION_HEADER, $accessToken);
+    }
+
+    private function getBadResponseData(GuzzleBadResponseException $exception): BadResponseData
+    {
+        $exceptionData = json_decode($exception->getResponse()->getBody()->getContents(), true);
+        $exceptionData = ($exceptionData !== false && !is_null($exceptionData)) ? $exceptionData : [];
+        return new BadResponseData(
+            $exceptionData['code'] ?? null,
+            $exceptionData['message'] ?? null,
+            $exceptionData['description'] ?? null
+        );
     }
 }
