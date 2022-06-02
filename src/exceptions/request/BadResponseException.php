@@ -6,37 +6,31 @@ use Throwable;
 
 abstract class BadResponseException extends RequestException
 {
-    private $errorCode;
-    private $errorMessage;
-    private $errorDescription;
+    protected $data;
 
     public function __construct(
-        ?int $errorCode = null,
-        ?string $errorMessage = null,
-        ?string $errorDescription = null,
+        BadResponseData $data,
         string $message = "",
         int $code = 0,
         Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
 
-        $this->errorCode = $errorCode;
-        $this->errorMessage = $errorMessage;
-        $this->errorDescription = $errorDescription;
+        $this->data = $data;
     }
 
     public function getErrorCode(): ?int
     {
-        return $this->errorCode;
+        return $this->data->getCode();
     }
 
     public function getErrorMessage(): ?string
     {
-        return $this->errorMessage;
+        return $this->data->getMessage();
     }
 
     public function getErrorDescription(): ?string
     {
-        return $this->errorDescription;
+        return $this->data->getDescription();
     }
 }
