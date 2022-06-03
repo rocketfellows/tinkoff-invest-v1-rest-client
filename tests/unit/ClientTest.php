@@ -12,6 +12,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use rocketfellows\TinkoffInvestV1RestClient\Client;
 use rocketfellows\TinkoffInvestV1RestClient\ClientConfig;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ClientException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ServerException;
 use Throwable;
 
 class ClientTest extends TestCase
@@ -42,6 +45,140 @@ class ClientTest extends TestCase
         $this->httpClient = $this->createMock(HttpClient::class);
 
         $this->client = new Client($this->clientConfig, $this->httpClient);
+    }
+
+    /**
+     * @dataProvider getHttpBadResponseThrowableProvidedData
+     */
+    public function testHttpClientThrowsServerException(
+        string $serviceName,
+        string $serviceMethod,
+        string $clientExceptionResponseBody,
+        string $expectedRequestUri,
+        array $expectedRequestOptions,
+        array $expectedExceptionData
+    ): void {
+        $exceptionThrown = false;
+
+        try {
+            $this->assertHttpClientRequestThrowsServerException(
+                $expectedRequestUri,
+                $expectedRequestOptions,
+                $clientExceptionResponseBody
+            );
+
+            $this->client->request($serviceName, $serviceMethod, []);
+        } catch (ServerException $exception) {
+            $this->assertBadResponseExceptionData($exception, $expectedExceptionData);
+            $exceptionThrown = true;
+        }
+
+        $this->assertTrue($exceptionThrown);
+    }
+
+    /**
+     * @dataProvider getHttpBadResponseThrowableProvidedData
+     */
+    public function testHttpClientThrowsClientException(
+        string $serviceName,
+        string $serviceMethod,
+        string $clientExceptionResponseBody,
+        string $expectedRequestUri,
+        array $expectedRequestOptions,
+        array $expectedExceptionData
+    ): void {
+        $exceptionThrown = false;
+
+        try {
+            $this->assertHttpClientRequestThrowsClientException(
+                $expectedRequestUri,
+                $expectedRequestOptions,
+                $clientExceptionResponseBody
+            );
+
+            $this->client->request($serviceName, $serviceMethod, []);
+        } catch (ClientException $exception) {
+            $this->assertBadResponseExceptionData($exception, $expectedExceptionData);
+            $exceptionThrown = true;
+        }
+
+        $this->assertTrue($exceptionThrown);
+    }
+
+    public function getHttpBadResponseThrowableProvidedData(): array
+    {
+        return [
+            'exceptionResponseAllParamsReturns' => [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'clientExceptionResponseBody' => '{"code":1,"message":"foo","description":"bar"}',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [],
+                ],
+                'expectedExceptionData' => ['code' => 1, 'message' => 'foo', 'description' => 'bar'],
+            ],
+            'exceptionResponseMoreThenExpectedParamsReturns' => [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'clientExceptionResponseBody' => '{"code":1,"message":"foo","description":"bar", "foo":"foo"}',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [],
+                ],
+                'expectedExceptionData' => ['code' => 1, 'message' => 'foo', 'description' => 'bar'],
+            ],
+            'exceptionParamCodeNotSetReturns' => [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'clientExceptionResponseBody' => '{"message":"foo","description":"bar"}',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [],
+                ],
+                'expectedExceptionData' => ['code' => null, 'message' => 'foo', 'description' => 'bar'],
+            ],
+            'exceptionParamMessageNotSetReturns' => [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'clientExceptionResponseBody' => '{"description":"bar"}',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [],
+                ],
+                'expectedExceptionData' => ['code' => null, 'message' => null, 'description' => 'bar'],
+            ],
+            'exceptionParamsInvalidJsonString' => [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'clientExceptionResponseBody' => '{:}',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [],
+                ],
+                'expectedExceptionData' => ['code' => null, 'message' => null, 'description' => null],
+            ],
+        ];
     }
 
     /**
@@ -141,6 +278,13 @@ class ClientTest extends TestCase
     private function assertHttpClientCallRequest(string $uri, array $options): InvocationMocker
     {
         return $this->httpClient->expects($this->once())->method('request')->with('POST', $uri, $options);
+    }
+
+    private function assertBadResponseExceptionData(BadResponseException $actualException, array $expectedData): void
+    {
+        $this->assertEquals($expectedData['code'], $actualException->getErrorCode());
+        $this->assertEquals($expectedData['message'], $actualException->getErrorMessage());
+        $this->assertEquals($expectedData['description'], $actualException->getErrorDescription());
     }
 
     private function getResponseMock(string $responseBodyContent): MockObject
