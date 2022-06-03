@@ -44,6 +44,74 @@ class ClientTest extends TestCase
         $this->client = new Client($this->clientConfig, $this->httpClient);
     }
 
+    /**
+     * @dataProvider getSuccessRequestProvidedData
+     */
+    public function testSuccessRequest(
+        string $serviceName,
+        string $serviceMethod,
+        array $requestData,
+        string $httpClientResponse,
+        string $expectedRequestUri,
+        array $expectedRequestOptions,
+        array $expectedResponse
+    ): void {
+        $this->assertHttpClientSendRequest($expectedRequestUri, $expectedRequestOptions, $this->getResponseMock($httpClientResponse));
+
+        $this->assertEquals($expectedResponse, $this->client->request($serviceName, $serviceMethod, $requestData));
+    }
+
+    public function getSuccessRequestProvidedData(): array
+    {
+        return [
+            'httpClientReturnsEmptyResponse' => [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'requestData' => [],
+                'httpClientResponse' => '',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [],
+                ],
+                'expectedResponse' => [],
+            ],
+            'httpClientReturnsComplexJsonResponse' => [
+                'serviceName' => 'fooName',
+                'serviceMethod' => 'barName',
+                'requestData' => ['foo' => 'bar', 'fooBar' => ['bar' => 'foo', 'foo' => true,],],
+                'httpClientResponse' => '{"foo":"bar","bar":1,"fooBar":[1,3,2],"barFoo":{"foo":true,"bar":10.4}}',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.fooName/barName',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => ['foo' => 'bar', 'fooBar' => ['bar' => 'foo', 'foo' => true,],],
+                ],
+                'expectedResponse' => ['foo' => 'bar', 'bar' => 1, 'fooBar' => [1, 3, 2,], 'barFoo' => ['foo' => true, 'bar' => 10.4],],
+            ],
+            'httpClientReturnsBrokenJsonResponse' => [
+                'serviceName' => 'fooName',
+                'serviceMethod' => 'barName',
+                'requestData' => ['foo' => 'bar', 'fooBar' => ['bar' => 'foo', 'foo' => true,],],
+                'httpClientResponse' => '{:"bar","bar":1,"fooBar":[1,3,2],"barFoo":{"foo":true,"bar":10.4}}',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.fooName/barName',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => ['foo' => 'bar', 'fooBar' => ['bar' => 'foo', 'foo' => true,],],
+                ],
+                'expectedResponse' => [],
+            ],
+        ];
+    }
+
     private function assertHttpClientSendRequest(string $uri, array $options, MockObject $response): void
     {
         $this->assertHttpClientCallRequest($uri, $options)->willReturn($response);
@@ -75,10 +143,10 @@ class ClientTest extends TestCase
         return $this->httpClient->expects($this->once())->method('request')->with('POST', $uri, $options);
     }
 
-    private function getResponseMock(string $responseBody): MockObject
+    private function getResponseMock(string $responseBodyContent): MockObject
     {
         $responseBody = $this->createMock(StreamInterface::class);
-        $responseBody->method('getContents')->willReturn($responseBody);
+        $responseBody->method('getContents')->willReturn($responseBodyContent);
 
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getBody')->willReturn($responseBody);
