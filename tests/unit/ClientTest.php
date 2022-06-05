@@ -52,6 +52,21 @@ class ClientTest extends TestCase
     /**
      * @dataProvider getRequestProvidedData
      */
+    public function testHttpClientThrowsUnknownGuzzleBadResponseException(
+        string $serviceName,
+        string $serviceMethod,
+        string $expectedRequestUri,
+        array $expectedRequestOptions
+    ): void {
+        $this->expectException(HttpClientException::class);
+        $this->assertHttpClientThrowsUnknownGuzzleBadResponseException($expectedRequestUri, $expectedRequestOptions);
+
+        $this->client->request($serviceName, $serviceMethod, []);
+    }
+
+    /**
+     * @dataProvider getRequestProvidedData
+     */
     public function testHttpClientThrowsGuzzleException(
         string $serviceName,
         string $serviceMethod,
@@ -287,6 +302,15 @@ class ClientTest extends TestCase
     private function assertHttpClientSendRequest(string $uri, array $options, MockObject $response): void
     {
         $this->assertHttpClientCallRequest($uri, $options)->willReturn($response);
+    }
+
+    private function assertHttpClientThrowsUnknownGuzzleBadResponseException(string $uri, array $options): void
+    {
+        $this->assertHttpClientRequestThrowsException(
+            $uri,
+            $options,
+            $this->createMock(UnknownGuzzleBadResponseStubException::class)
+        );
     }
 
     private function assertHttpClientThrowsGuzzleException(string $uri, array $options): void
