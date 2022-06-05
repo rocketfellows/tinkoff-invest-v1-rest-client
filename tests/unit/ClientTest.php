@@ -4,6 +4,7 @@ namespace rocketfellows\TinkoffInvestV1RestClient\tests\unit;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException as GuzzleClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException as GuzzleServerException;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -14,6 +15,7 @@ use rocketfellows\TinkoffInvestV1RestClient\Client;
 use rocketfellows\TinkoffInvestV1RestClient\ClientConfig;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ClientException;
+use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\HttpClientException;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ServerException;
 use Throwable;
 
@@ -45,6 +47,39 @@ class ClientTest extends TestCase
         $this->httpClient = $this->createMock(HttpClient::class);
 
         $this->client = new Client($this->clientConfig, $this->httpClient);
+    }
+
+    /**
+     * @dataProvider getRequestProvidedData
+     */
+    public function testHttpClientThrowsGuzzleException(
+        string $serviceName,
+        string $serviceMethod,
+        string $expectedRequestUri,
+        array $expectedRequestOptions
+    ): void {
+        $this->expectException(HttpClientException::class);
+        $this->assertHttpClientThrowsGuzzleException($expectedRequestUri, $expectedRequestOptions);
+
+        $this->client->request($serviceName, $serviceMethod, []);
+    }
+
+    public function getRequestProvidedData(): array
+    {
+        return [
+            [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -252,6 +287,11 @@ class ClientTest extends TestCase
     private function assertHttpClientSendRequest(string $uri, array $options, MockObject $response): void
     {
         $this->assertHttpClientCallRequest($uri, $options)->willReturn($response);
+    }
+
+    private function assertHttpClientThrowsGuzzleException(string $uri, array $options): void
+    {
+        $this->assertHttpClientRequestThrowsException($uri, $options, $this->createMock(GuzzleException::class));
     }
 
     private function assertHttpClientRequestThrowsClientException(string $uri, array $options, string $responseBody): void
