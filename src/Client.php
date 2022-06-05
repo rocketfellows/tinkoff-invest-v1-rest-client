@@ -50,14 +50,22 @@ class Client
                 throw new HttpClientException($exception->getMessage(), $exception->getCode(), $exception);
             }
 
-            $badResponseData = $this->getBadResponseData($exception);
-
             if ($exception instanceof GuzzleClientException) {
-                throw new ClientException($badResponseData, $exception->getMessage(), $exception->getCode(), $exception);
+                throw new ClientException(
+                    $this->getBadResponseData($exception),
+                    $exception->getMessage(),
+                    $exception->getCode(),
+                    $exception
+                );
             }
 
             if ($exception instanceof GuzzleServerException) {
-                throw new ServerException($badResponseData, $exception->getMessage(), $exception->getCode(), $exception);
+                throw new ServerException(
+                    $this->getBadResponseData($exception),
+                    $exception->getMessage(),
+                    $exception->getCode(),
+                    $exception
+                );
             }
 
             throw new HttpClientException($exception->getMessage(), $exception->getCode(), $exception);
