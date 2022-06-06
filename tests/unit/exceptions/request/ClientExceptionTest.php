@@ -7,6 +7,9 @@ use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseExcept
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ClientException;
 use Throwable;
 
+/**
+ * @group exceptions
+ */
 class ClientExceptionTest extends BadResponseExceptionTest
 {
     public function instantiateException(

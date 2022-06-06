@@ -5,6 +5,9 @@ namespace rocketfellows\TinkoffInvestV1RestClient\tests\unit\exceptions\request;
 use PHPUnit\Framework\TestCase;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseData;
 
+/**
+ * @group exceptions
+ */
 class BadResponseDataTest extends TestCase
 {
     /**

@@ -7,6 +7,9 @@ use rocketfellows\TinkoffInvestV1RestClient\ClientConfig;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\config\AccessTokenEmptyException;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\config\ServerUrlEmptyException;
 
+/**
+ * @group client
+ */
 class ClientConfigTest extends TestCase
 {
     private const SERVER_URL_TEST_VALUE = 'server_url_test_value';

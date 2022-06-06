@@ -19,6 +19,9 @@ use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\HttpClientExcepti
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ServerException;
 use Throwable;
 
+/**
+ * @group client
+ */
 class ClientTest extends TestCase
 {
     private const SERVER_URL_TEST_VALUE = 'server_url_test_value';

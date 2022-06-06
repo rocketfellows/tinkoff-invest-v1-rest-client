@@ -7,6 +7,9 @@ use PHPUnit\Framework\TestCase;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException;
 use Throwable;
 
+/**
+ * @group exceptions
+ */
 abstract class BadResponseExceptionTest extends TestCase
 {
     abstract public function instantiateException(
