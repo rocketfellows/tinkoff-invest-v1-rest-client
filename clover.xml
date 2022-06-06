@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1654546216">
-  <project timestamp="1654546216">
+<coverage generated="1654548093">
+  <project timestamp="1654548093">
     <file name="/app/src/Client.php">
       <class name="rocketfellows\TinkoffInvestV1RestClient\Client" namespace="global">
         <metrics complexity="16" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="33" coveredstatements="33" elements="41" coveredelements="41"/>
