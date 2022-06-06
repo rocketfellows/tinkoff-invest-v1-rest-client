@@ -29,16 +29,14 @@ Full list of available Tinkoff Invest V1 services and methods here https://tinko
 
 ## Interface exceptions
 
-\rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ServerException - exception when a server error is encountered (5xx codes)
-\rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ClientException - exception when a client error is encountered (4xx codes)
-\rocketfellows\TinkoffInvestV1RestClient\exceptions\request\HttpClientException - exception for other errors
+- \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ServerException - exception when a server error is encountered (5xx codes)
+- \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ClientException - exception when a client error is encountered (4xx codes)
+- \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\HttpClientException - exception for other errors
 
 Both ServerException and **ClientException** extends \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException
 which holds server error response data:
 - \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException::getErrorCode
-
 - \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException::getErrorMessage
-
 - \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException::getErrorDescription
 
 Server error data response example:
