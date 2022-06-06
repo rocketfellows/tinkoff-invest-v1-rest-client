@@ -36,7 +36,9 @@ Full list of available Tinkoff Invest V1 services and methods here https://tinko
 Both ServerException and **ClientException** extends \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException
 which holds server error response data:
 - \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException::getErrorCode
+
 - \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException::getErrorMessage
+
 - \rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseException::getErrorDescription
 
 Server error data response example:
