@@ -33,7 +33,7 @@ class Client
      * @throws ClientException
      * @throws HttpClientException
      */
-    public function request(string $serviceName, string $serviceMethod, array $data): array
+    public function request(string $serviceName, string $serviceMethod, ?array $data = null): array
     {
         try {
             $response = $this->httpClient->request(
@@ -90,11 +90,11 @@ class Client
         return sprintf(self::MASK_SERVICE_PATH, $serviceName);
     }
 
-    private function getRequestOptions(string $accessToken, array $data): array
+    private function getRequestOptions(string $accessToken, ?array $data = null): array
     {
         return [
             'headers' => $this->getRequestHeader($accessToken),
-            'json' => $data,
+            'json' => !empty($data) ? $data : (object) [],
         ];
     }
 

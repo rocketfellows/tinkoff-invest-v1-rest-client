@@ -17,6 +17,7 @@ use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\BadResponseExcept
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ClientException;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\HttpClientException;
 use rocketfellows\TinkoffInvestV1RestClient\exceptions\request\ServerException;
+use stdClass;
 use Throwable;
 
 /**
@@ -94,7 +95,7 @@ class ClientTest extends TestCase
                         'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
                         'Accept' => 'application/json',
                     ],
-                    'json' => [],
+                    'json' => new stdClass(),
                 ],
             ],
         ];
@@ -171,7 +172,7 @@ class ClientTest extends TestCase
                         'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
                         'Accept' => 'application/json',
                     ],
-                    'json' => [],
+                    'json' => new stdClass(),
                 ],
                 'expectedExceptionData' => ['code' => 1, 'message' => 'foo', 'description' => 'bar'],
             ],
@@ -185,7 +186,7 @@ class ClientTest extends TestCase
                         'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
                         'Accept' => 'application/json',
                     ],
-                    'json' => [],
+                    'json' => new stdClass(),
                 ],
                 'expectedExceptionData' => ['code' => 1, 'message' => 'foo', 'description' => 'bar'],
             ],
@@ -199,7 +200,7 @@ class ClientTest extends TestCase
                         'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
                         'Accept' => 'application/json',
                     ],
-                    'json' => [],
+                    'json' => new stdClass(),
                 ],
                 'expectedExceptionData' => ['code' => null, 'message' => 'foo', 'description' => 'bar'],
             ],
@@ -213,7 +214,7 @@ class ClientTest extends TestCase
                         'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
                         'Accept' => 'application/json',
                     ],
-                    'json' => [],
+                    'json' => new stdClass(),
                 ],
                 'expectedExceptionData' => ['code' => null, 'message' => null, 'description' => 'bar'],
             ],
@@ -227,7 +228,7 @@ class ClientTest extends TestCase
                         'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
                         'Accept' => 'application/json',
                     ],
-                    'json' => [],
+                    'json' => new stdClass(),
                 ],
                 'expectedExceptionData' => ['code' => null, 'message' => null, 'description' => null],
             ],
@@ -240,7 +241,7 @@ class ClientTest extends TestCase
     public function testSuccessRequest(
         string $serviceName,
         string $serviceMethod,
-        array $requestData,
+        ?array $requestData,
         string $httpClientResponse,
         string $expectedRequestUri,
         array $expectedRequestOptions,
@@ -254,7 +255,7 @@ class ClientTest extends TestCase
     public function getSuccessRequestProvidedData(): array
     {
         return [
-            'httpClientReturnsEmptyResponse' => [
+            'httpClientReturnsEmptyResponseWithRequestDataEmpty' => [
                 'serviceName' => 'ServiceName',
                 'serviceMethod' => 'ServiceMethod',
                 'requestData' => [],
@@ -265,7 +266,22 @@ class ClientTest extends TestCase
                         'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
                         'Accept' => 'application/json',
                     ],
-                    'json' => [],
+                    'json' => new stdClass(),
+                ],
+                'expectedResponse' => [],
+            ],
+            'httpClientReturnsEmptyResponseWithRequestDataNotSet' => [
+                'serviceName' => 'ServiceName',
+                'serviceMethod' => 'ServiceMethod',
+                'requestData' => null,
+                'httpClientResponse' => '',
+                'expectedRequestUri' => self::SERVER_URL_TEST_VALUE . '/tinkoff.public.invest.api.contract.v1.ServiceName/ServiceMethod',
+                'expectedRequestOptions' => [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . self::ACCESS_TOKEN_TEST_VALUE,
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => new stdClass(),
                 ],
                 'expectedResponse' => [],
             ],
