@@ -8,6 +8,11 @@ Consist of:
 - \rocketfellows\TinkoffInvestV1RestClient\Client - intended for direct sending of requests
 - \rocketfellows\TinkoffInvestV1RestClient\ClientConfig - client configuration
 
+## Installation
+```shell
+composer require rocketfellows/tinkoff-invest-v1-rest-client
+```
+
 ## Client config
 ClientConfig contains:
 - **serverUrl** - which is common Tinkoff Invest V1 url, for example https://invest-public-api.tinkoff.ru/rest
