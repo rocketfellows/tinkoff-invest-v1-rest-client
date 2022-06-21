@@ -11,7 +11,7 @@ class BadResponseData
     public function __construct(
         ?int $code = null,
         ?string $message = null,
-        ?string $description = null,
+        ?string $description = null
     ) {
         $this->code = $code;
         $this->message = $message;
